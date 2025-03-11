@@ -1,15 +1,7 @@
-#include <stdlib.h>
-#include <malloc.h>
-typedef struct NODE
-{
-    char data;
-    struct NODE *next;
-    struct NODE *prev;
-}NODE;
-
+#include "node.h"
 NODE* makeNode(char data){
-    NODE* newNode=(NODE*)malloc(sizeof(newNode));
-    newNode=data;
+    NODE* newNode=(NODE*)malloc(sizeof(NODE));
+    newNode->data=data;
     newNode->prev=newNode;
     newNode->next=newNode;
     return newNode;
