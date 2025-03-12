@@ -1,16 +1,15 @@
-#include "linkedList.h"
+#include "expression.h"
 
 LinkedList* ExprInput();
-//LinkedList* NumPreprocessing(LinkedList *expr);
+
 int main(){
-    LinkedList* input=ExprInput(); //input expr
-    //number of Expr preprocessing
+    LinkedList* Bef_input=ExprInput(); //input expr
+    Expr* Aft_input=NumPreprocessing(Bef_input);//number of Expr preprocessing
 
 
-
-
-    LLAllRemove(input);
-
+    LLPrint(Bef_input);
+    LLAllRemove(Bef_input);
+    
     return 0;
 }
 
@@ -18,15 +17,8 @@ LinkedList* ExprInput(){
     char c=getchar();
     LinkedList* LL=LLInit();
     while(c!=EOF){
-        pushBack(LL,c);
+        LLpushBack(LL,c);
         c=getchar();
     }
     return LL;    
 }
-
-// LinkedList* NumPreprocessing(LinkedList *expr){
-//     if(LLisEmpty(expr)){ printf("오류! 식을 입력하지 않았습니다.\n"); return expr;}
-//     NODE* head=expr->head->next;
-    
-//     return expr;
-// }
