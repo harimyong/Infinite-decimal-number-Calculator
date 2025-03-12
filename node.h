@@ -1,5 +1,9 @@
 #include <stdlib.h>
 #include <malloc.h>
+#include <stdio.h>
+typedef int bool;
+#define false 0;
+#define true 1;
 
 typedef struct NODE
 {

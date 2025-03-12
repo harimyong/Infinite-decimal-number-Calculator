@@ -1,21 +1,22 @@
-#include <stdio.h>
 #include "linkedList.h"
 
-LinkedList* LLinput();
-void LLremove(LinkedList *LL);
+LinkedList* ExprInput();
+//LinkedList* NumPreprocessing(LinkedList *expr);
 int main(){
-    LinkedList* input=LLinput();
-    LLPrint(input);
+    LinkedList* input=ExprInput(); //input expr
+    //number of Expr preprocessing
 
 
 
-    LLremove(input);
+
+    LLAllRemove(input);
+
     return 0;
 }
 
-LinkedList* LLinput(){
+LinkedList* ExprInput(){
     char c=getchar();
-    LinkedList* LL=init();
+    LinkedList* LL=LLInit();
     while(c!=EOF){
         pushBack(LL,c);
         c=getchar();
@@ -23,11 +24,9 @@ LinkedList* LLinput(){
     return LL;    
 }
 
-void LLremove(LinkedList *LL){
-    NODE* now=LL->head;
-    while(now->next!=NULL){
-        NODE* nxt=now->next;
-        free(now);
-        now=nxt;
-    }
-}
+// LinkedList* NumPreprocessing(LinkedList *expr){
+//     if(LLisEmpty(expr)){ printf("오류! 식을 입력하지 않았습니다.\n"); return expr;}
+//     NODE* head=expr->head->next;
+    
+//     return expr;
+// }

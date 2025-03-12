@@ -5,7 +5,11 @@ typedef struct
     NODE* tail;
 }LinkedList;
 
-void pushFront(LinkedList *L,char data);
-void pushBack(LinkedList *L,char data);
-LinkedList* init();
+void LLpushFront(LinkedList *L,char data);
+void LLpushBack(LinkedList *L,char data);
+LinkedList* LLInit();
+void LLElementRemove(LinkedList *L);
+void LLHeadTailRemove(LinkedList *L);
+void LLAllRemove(LinkedList *L);
 void LLPrint(LinkedList *L);
+bool LLisEmpty(LinkedList *L);
