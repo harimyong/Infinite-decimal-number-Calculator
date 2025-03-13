@@ -26,17 +26,18 @@ void LLpushBack(LinkedList *L,char data){
     L->tail->prev=newNODE;
 }
 
-void LLPrint(LinkedList *L){
-    if(LLisEmpty(L)){ printf("오류! 식을 입력하지 않았습니다.\n"); return; }
+bool LLPrint(LinkedList *L){
+    if(LLisEmpty(L)) return false;
     NODE* now=L->head;
     while(now->next!=NULL){
         now=now->next;
         printf("%c",now->data);
     }printf("\n");
+    return true;
 }
 
-void LLElementRemove(LinkedList *L){
-    if(LLisEmpty(L)){ printf("오류! 식을 지울 수 없습니다.\n"); return; }
+bool LLElementRemove(LinkedList *L){
+    if(LLisEmpty(L)) return false; 
     NODE* now=L->head->next;
     L->head->next=L->tail;
     L->tail->prev=L->head;
@@ -46,10 +47,15 @@ void LLElementRemove(LinkedList *L){
         free(now);
         now=nxt;
     }
+    return true;
 }
 
 void LLHeadTailRemove(LinkedList *L){ free(L->head); free(L->tail); }
     
-void LLAllRemove(LinkedList *L){LLElementRemove(L); LLHeadTailRemove(L); free(L);}
+bool LLAllRemove(LinkedList *L){ 
+    if(LLElementRemove(L)==false) return false;
+    LLHeadTailRemove(L); free(L);
+    return true;
+}
 
 bool LLisEmpty(LinkedList *L){ return L->head->next->data==0; }

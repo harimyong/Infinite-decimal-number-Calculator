@@ -5,7 +5,10 @@ LinkedList* ExprInput();
 int main(){
     LinkedList* Bef_input=ExprInput(); //input expr
     Expr* Aft_input=NumPreprocessing(Bef_input);//number of Expr preprocessing
-
+    if(EisEmpty(Aft_input)){
+        printf("오류! 식을 입력하지 않았습니다.\n");
+        return 0;
+    }
 
     LLPrint(Bef_input);
     LLAllRemove(Bef_input);

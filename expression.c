@@ -3,7 +3,8 @@
 bool isNUM_ASCII(char data){ return '0'<=data && data<='9'; }
 
 Expr* NumPreprocessing(LinkedList *expr){
-    Expr* EXPR=(Expr*)malloc(sizeof(Expr));
+    Expr* EXPR=EInit();
+    if(LLisEmpty(expr)) return EXPR;
     NODE* now=expr->head->next;
     while(now->next!=NULL){
         if(isNUM_ASCII(now->data)){
@@ -12,12 +13,14 @@ Expr* NumPreprocessing(LinkedList *expr){
                 LLpushBack(NUMBER,now->data);
                 now=now->next;
             }
-            LLPrint(NUMBER);
+            //LLPrint(NUMBER);
             ExprNODE* newElement=makeExprNODE(NUMBER,0);
+            EpushBack(EXPR,newElement);
         }else{
-            printf("기호 %c\n",now->data);
+            //printf("기호 %c\n",now->data);
             ExprNODE* newElement=makeExprNODE(NULL,now->data);
             now=now->next;
+            EpushBack(EXPR,newElement);
         }
     }
     return EXPR;
@@ -54,8 +57,21 @@ void EpushBack(Expr *E,ExprNODE *data){
     E->tail->prev->next=data;
     E->tail->prev=data;
 }
+
+bool EPrint(Expr *E){
+    if(EisEmpty(E)) return false;
+    ExprNODE* now=E->head->next;
+    while(now!=NULL && now->next!=NULL){
+        if(now->NUMBER!=NULL) LLPrint(now->NUMBER);
+        else printf("기호 %c\n",now->oper);
+        now=now->next;
+    }
+    return true;
+}
+
+bool EisEmpty(Expr *E){ return E->head->next->oper==0 && E->head->next->NUMBER==NULL; }
+
+
 // void EElementRemove(LinkedList *E){ LLElementRemove(E); }
 // void EHeadTailRemove(LinkedList *E){ LLHeadTailRemove(E); }
 // void EAllRemove(LinkedList *E){ LLAllRemove(E); }
-// void EPrint(LinkedList *E){ LLPrint(E); }
-// bool EisEmpty(LinkedList *E){ LLisEmpty(E); }

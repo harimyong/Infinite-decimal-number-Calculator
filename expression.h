@@ -18,3 +18,5 @@ Expr* NumPreprocessing(LinkedList *expr);
 bool isNUM_ASCII(char data);
 void EpushFront(Expr *E,ExprNODE *data);
 void EpushBack(Expr *E,ExprNODE *data);
+bool EisEmpty(Expr *E);
+bool EPrint(Expr *E);
