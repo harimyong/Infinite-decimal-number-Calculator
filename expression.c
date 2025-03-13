@@ -1,4 +1,5 @@
 #include "expression.h"
+
 bool isNUM_ASCII(char data){ return '0'<=data && data<='9'; }
 
 Expr* NumPreprocessing(LinkedList *expr){
