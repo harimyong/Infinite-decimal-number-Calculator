@@ -71,7 +71,28 @@ bool EPrint(Expr *E){
 
 bool EisEmpty(Expr *E){ return E->head->next->oper==0 && E->head->next->NUMBER==NULL; }
 
-
-// void EElementRemove(LinkedList *E){ LLElementRemove(E); }
-// void EHeadTailRemove(LinkedList *E){ LLHeadTailRemove(E); }
-// void EAllRemove(LinkedList *E){ LLAllRemove(E); }
+bool EElementRemove(Expr *E){
+    if(EisEmpty(E)) return false;
+    ExprNODE* now=E->head->next;
+    E->head->next=E->tail;
+    E->tail->prev=E->head;
+    while(now->NUMBER!=NULL || now->oper!=0){
+        ExprNODE* nxt=now->next;
+        free(now->NUMBER);
+        free(now);
+        now=nxt;
+    }
+    return true;
+}
+void EHeadTailRemove(Expr *E){
+    ExprNODE* H=E->head;
+    ExprNODE* T=E->tail;
+    free(H->NUMBER);
+    free(T->NUMBER);
+    free(H); free(T);
+}
+bool EAllRemove(Expr *E){
+    if(EElementRemove(E)==false) return false;
+    EHeadTailRemove(E); free(E);
+    return true;
+}

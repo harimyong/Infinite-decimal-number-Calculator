@@ -10,8 +10,14 @@ int main(){
         return 0;
     }
 
-    LLPrint(Bef_input);
-    LLAllRemove(Bef_input);
+    EPrint(Aft_input);
+    if(LLAllRemove(Bef_input)==false){
+        printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
+    }
+    if(EAllRemove(Aft_input)==false){
+        printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
+    }
+
     
     return 0;
 }

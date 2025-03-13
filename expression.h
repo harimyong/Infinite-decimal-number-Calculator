@@ -20,3 +20,6 @@ void EpushFront(Expr *E,ExprNODE *data);
 void EpushBack(Expr *E,ExprNODE *data);
 bool EisEmpty(Expr *E);
 bool EPrint(Expr *E);
+bool EElementRemove(Expr *E);
+void EHeadTailRemove(Expr *E);
+bool EAllRemove(Expr *E);
