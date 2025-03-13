@@ -1,9 +1,13 @@
 #include "calculator.h"
 
 ExprNODE* ADD(ExprNODE* A,ExprNODE* B){
+    
     if(A->oper!=B->oper) return SUB(A,B);
     ExprNODE* newNUMBER=makeExprNODE(NULL,0);
     
+
+
+
     return newNUMBER;
 }
 ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
@@ -16,5 +20,13 @@ ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
 bool CompareAB(ExprNODE* A,ExprNODE* B){
     NODE* Anow=A->NUMBER->head;
     NODE* Bnow=B->NUMBER->head;
+    return true;
+}
+bool isZero(ExprNODE* N){
+    NODE* now=N->NUMBER->head;
+    while(now->next!=NULL){
+        now=now->next;
+        if(now->data!='0') return false;
+    }
     return true;
 }

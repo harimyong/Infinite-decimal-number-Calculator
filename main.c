@@ -1,4 +1,4 @@
-#include "expression.h"
+#include "calculator.h"
 
 LinkedList* ExprInput();
 
@@ -11,13 +11,24 @@ int main(){
     }
 
     EPrint(Aft_input);
-    if(LLAllRemove(Bef_input)==false){
-        printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
-    }
-    if(EAllRemove(Aft_input)==false){
-        printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
-    }
+    // if(LLAllRemove(Bef_input)==false){
+    //     printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
+    // }
+    // if(EAllRemove(Aft_input)==false){
+    //     printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
+    // }
 
+    ExprNODE* now=Aft_input->head;
+    while(now!=NULL && now->next!=NULL){
+        now=now->next;
+        printf("cs\n");
+        if(now->NUMBER!=NULL)
+        printf("%d\n",isZero(now));
+        else
+        printf("%c\n",now->oper);
+        printf("\n");
+
+    }
     
     return 0;
 }
