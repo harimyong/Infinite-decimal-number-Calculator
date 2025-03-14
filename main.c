@@ -11,25 +11,26 @@ int main(){
     }
 
     EPrint(Aft_input);
-    // if(LLAllRemove(Bef_input)==false){
-    //     printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
-    // }
-    // if(EAllRemove(Aft_input)==false){
-    //     printf("오류! 식을 삭제할 수 없거나 존재하지 않습니다.\n");
-    // }
 
+
+    //test
+    ExprNODE* A=NULL;
+    ExprNODE* B=NULL;
     ExprNODE* now=Aft_input->head;
-    while(now!=NULL && now->next!=NULL){
+    while(now->next->NUMBER!=NULL || now->next->oper!=0){
         now=now->next;
-        printf("cs\n");
-        if(now->NUMBER!=NULL)
-        printf("%d\n",isZero(now));
-        else
-        printf("%c\n",now->oper);
-        printf("\n");
-
+        if(isNUMBER(now)){
+            if(A==NULL) A=now;
+            else if(B==NULL) B=now;
+            else break;
+        }
     }
-    
+    NumberBalancing(A,B);
+    LLPrint(A->NUMBER);
+    LLPrint(B->NUMBER);
+    ExprNODE* res=ADD(A,B);
+    LLPrint(res->NUMBER);
+    //test fin
     return 0;
 }
 
