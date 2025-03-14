@@ -28,8 +28,7 @@ int main(){
     NumberBalancing(A,B);
     LLPrint(A->NUMBER);
     LLPrint(B->NUMBER);
-    ExprNODE* res=ADD(A,B);
-    LLPrint(res->NUMBER);
+
     //test fin
     return 0;
 }

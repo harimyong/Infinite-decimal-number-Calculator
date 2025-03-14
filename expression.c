@@ -14,7 +14,7 @@ Expr* NumPreprocessing(LinkedList *expr){
                 now=now->next;
             }
             //LLPrint(NUMBER);
-            ExprNODE* newElement=makeExprNODE(NUMBER,0);
+            ExprNODE* newElement=makeExprNODE(NUMBER,'+');
             EpushBack(EXPR,newElement);
         }else{
             //printf("기호 %c\n",now->data);
