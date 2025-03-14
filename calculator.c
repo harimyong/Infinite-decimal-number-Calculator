@@ -8,6 +8,7 @@ ExprNODE* ADD(ExprNODE* A,ExprNODE* B){
     }else if(A->oper=='-' && B->oper=='+'){
         A->oper='+'; return SUB(B,A);
     }
+    FillZero(A,B);
     NODE* Anow=A->NUMBER->tail;
     NODE* Bnow=B->NUMBER->tail;
     while(Anow->prev->data!=0 && Bnow->prev->data!=0){
@@ -27,6 +28,7 @@ ExprNODE* ADD(ExprNODE* A,ExprNODE* B){
     //-A + -B -> -(A+B) -> ADD
     return A;
 }
+
 ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
     if(isZero(A)) return B;
     if(isZero(B)) return A;
@@ -40,6 +42,7 @@ ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
     }
     if(CompareAB(A,B)==false){ ExprNODE* res=SUB(B,A); res->oper='-'; return res; }
     
+    FillZero(A,B);
     NODE* Anow=A->NUMBER->tail;
     NODE* Bnow=B->NUMBER->tail;
     while(Anow->prev->data!=0 && Bnow->prev->data!=0){
@@ -59,11 +62,43 @@ ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
     if(isZero(A)) A->oper='+';
     return A;
 }
+
+ExprNODE* MUL(ExprNODE* A,ExprNODE* B){
+    if(isZero(A)) return A;
+    if(isZero(B)) return B;
+
+    /* logic
+        
+    */
+    
+
+
+
+    return A;
+}
+ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
+    if(isZero(B))return NULL;
+    if(isZero(A))return A;
+
+
+     /* logic
+        
+    */
+
+    return A;
+}
+
+
+
+
+
+
+
+//Utilitys
 bool CompareAB(ExprNODE* A,ExprNODE* B){ 
     if(isSameAB(A,B)==true) return true;
     NODE* Anow=A->NUMBER->head;
     NODE* Bnow=B->NUMBER->head;
-    //logic
     while(Anow->next->data!=0 && Bnow->next->data!=0){
         Anow=Anow->next; Bnow=Bnow->next;
         //printf("%c %c\n",Anow->data,Bnow->data);
@@ -71,19 +106,16 @@ bool CompareAB(ExprNODE* A,ExprNODE* B){
         else if(Anow->data>Bnow->data) return true;
         else return false;
     }
-    //logic
 }
 
 bool isSameAB(ExprNODE* A,ExprNODE* B){ 
     NODE* Anow=A->NUMBER->head;
     NODE* Bnow=B->NUMBER->head;
-    //logic
     while(Anow->next->data!=0 && Bnow->next->data!=0){
         Anow=Anow->next; Bnow=Bnow->next;
         //printf("%c %c\n",Anow->data,Bnow->data);
         if(Anow->data!=Bnow->data) return false;
     }
-    //logic
     return true;
 }
 
@@ -107,6 +139,13 @@ void FillZero(ExprNODE* A,ExprNODE* B){
     }
     LLpushFront(A->NUMBER,'0');
     LLpushFront(B->NUMBER,'0');
+}
+
+void PopZero(ExprNODE *E){
+    /*
+        logic
+    */
+
 }
 
 bool isNUMBER(ExprNODE* EN){ return EN->NUMBER!=NULL; }
