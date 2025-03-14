@@ -25,10 +25,11 @@ int main(){
             else break;
         }
     }
-    NumberBalancing(A,B);
-    LLPrint(A->NUMBER);
-    LLPrint(B->NUMBER);
-
+    FillZero(A,B);
+    LLPrint(B->NUMBER); printf("%c\n",B->oper);
+    LLPrint(A->NUMBER); printf("%c\n",A->oper);
+    ExprNODE* res=SUB(B,A);
+    printf("%c",res->oper); LLPrint(res->NUMBER);
     //test fin
     return 0;
 }
