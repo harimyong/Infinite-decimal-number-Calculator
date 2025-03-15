@@ -144,6 +144,7 @@ ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
 
 //Utilitys
 bool CompareAB(ExprNODE* A,ExprNODE* B){ 
+    PopZero(A); PopZero(B);
     FillZero(A,B);
     if(isSameAB(A,B)==true) return true;
     NODE* Anow=A->NUMBER->head;
