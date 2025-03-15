@@ -28,7 +28,7 @@ int main(){
 
     //LLPrint(A->NUMBER); LLPrint(B->NUMBER);
     ExprNODE* res=MUL(A,B);
-    printf("%c",res->oper); LLPrint(res->NUMBER);
+    ENumberPrint(res);
     //test fin
     return 0;
 }

@@ -4,7 +4,7 @@
 ExprNODE* ADD(ExprNODE* A,ExprNODE* B);
 ExprNODE* SUB(ExprNODE* A,ExprNODE* B);
 ExprNODE* MUL(ExprNODE* A,ExprNODE* B);
-ExprNODE* DIV(ExprNODE* A,ExprNODE* B);
+ExprNODE* DIV(ExprNODE* A,ExprNODE* B); //wait
 
 
 
@@ -15,5 +15,6 @@ bool isZero(ExprNODE* N);
 bool isNUMBER(ExprNODE* EN);
 bool isOper(ExprNODE* EN);
 
+void ENumberPrint(ExprNODE *EN);
 void FillZero(ExprNODE* A,ExprNODE* B);
 void PopZero(ExprNODE *E);

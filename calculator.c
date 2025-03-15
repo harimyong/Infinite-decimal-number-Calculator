@@ -196,5 +196,10 @@ void PopZero(ExprNODE *N){
     if(LLisEmpty(N->NUMBER)) LLpushFront(N->NUMBER,'0');
 }
 
+void ENumberPrint(ExprNODE *EN){
+    if(isNUMBER(EN)==false) printf("숫자가 아닙니다!\n");
+    else { printf("%c",EN->oper); LLPrint(EN->NUMBER); }
+}
+
 bool isNUMBER(ExprNODE* EN){ return EN->NUMBER!=NULL; }
 bool isOper(ExprNODE* EN){ return EN->NUMBER==NULL && EN->oper!=0; }
