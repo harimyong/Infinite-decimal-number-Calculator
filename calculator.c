@@ -51,7 +51,7 @@ ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
         A->oper='+'; B->oper='+';
         return SUB(B,A);
     }
-    if(CompareAB(A,B)==false){ ExprNODE* res=SUB(B,A); res->oper='-'; return res; }
+    if(CompareAB(A,B,true)==false){ ExprNODE* res=SUB(B,A); res->oper='-'; return res; }
     
     // printf("%c",A->oper); LLPrint(A->NUMBER);
     // printf("-\n");
@@ -126,14 +126,38 @@ ExprNODE* MUL(ExprNODE* A,ExprNODE* B){
 
 ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
     if(isZero(B))return NULL; //Division By Zero Error
-    if(isZero(A))return A; // 0 * B = 0
+    if(isZero(A))return A; // 0 / B = 0
+    PopZero(A); PopZero(B);
+    char Q_oper='+';
+    if(A->oper!=B->oper) Q_oper='-';
+    LinkedList* Q_N=LLInit();
+
+    //BNumber Copy -> RemainderNumber
+    LinkedList* R_N=LLInit();
+    ExprNODE* R_EN=makeExprNODE(R_N,'+');
+    // NODE* Anow=A->NUMBER->head;
+    // while(Anow->next->data!=0){ Anow=Anow->next; LLpushBack(R_N,Anow->data); }
+
+    //Divide
+    NODE* Anow=A->NUMBER->head;
+    while(Anow->next->data!=0){
+        Anow=Anow->next;
+        LLpushBack(R_N,Anow->data);
+        if(isSameAB(B,R_EN)==false and CompareAB(B,R_EN,false)==true){
+            LLpushBack(Q_N,'0');
+        }
+        printf("\n");
+        printf("Q : ");LLPrint(Q_N);
+        printf("R : ");LLPrint(R_N);
+
+    }
+    printf("\n");
+    LLPrint(Q_N);
+    LLPrint(R_N);
 
 
-     /* logic
-        
-    */
 
-    return A;
+    return makeExprNODE(Q_N,Q_oper);
 }
 
 
@@ -143,8 +167,8 @@ ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
 
 
 //Utilitys
-bool CompareAB(ExprNODE* A,ExprNODE* B){ 
-    PopZero(A); PopZero(B);
+bool CompareAB(ExprNODE* A,ExprNODE* B,bool opt){ 
+    if(opt) { PopZero(A); PopZero(B); }
     FillZero(A,B);
     if(isSameAB(A,B)==true) return true;
     NODE* Anow=A->NUMBER->head;
@@ -153,8 +177,8 @@ bool CompareAB(ExprNODE* A,ExprNODE* B){
         Anow=Anow->next; Bnow=Bnow->next;
         //printf("%c %c\n",Anow->data,Bnow->data);
         if(Anow->data==Bnow->data) continue;
-        else if(Anow->data>Bnow->data) return true;
-        else return false;
+        else if(Anow->data>Bnow->data) { if(opt) { PopZero(A); PopZero(B); } return true; }
+        else { if(opt) { PopZero(A); PopZero(B); } return false; }
     }
 }
 

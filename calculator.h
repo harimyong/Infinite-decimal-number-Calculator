@@ -9,7 +9,7 @@ ExprNODE* DIV(ExprNODE* A,ExprNODE* B); //wait
 
 
 //Utilitys
-bool CompareAB(ExprNODE* A,ExprNODE* B);
+bool CompareAB(ExprNODE* A,ExprNODE* B,bool opt);
 bool isSameAB(ExprNODE* A,ExprNODE* B);
 bool isZero(ExprNODE* N);
 bool isNUMBER(ExprNODE* EN);

@@ -27,8 +27,8 @@ int main(){
     }
 
     //LLPrint(A->NUMBER); LLPrint(B->NUMBER);
-    ExprNODE* res=MUL(A,B);
-    ENumberPrint(res);
+    ExprNODE* res=DIV(A,B);
+    //ENumberPrint(res);
     //test fin
     return 0;
 }
