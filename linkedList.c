@@ -26,6 +26,24 @@ void LLpushBack(LinkedList *L,char data){
     L->tail->prev=newNODE;
 }
 
+bool LLpopFront(LinkedList *L){
+    if(LLisEmpty(L)) return false;
+    NODE* removeNODE=L->head->next;
+    L->head->next->next->prev=L->head;
+    L->head->next=L->head->next->next;
+    free(removeNODE);
+    return true;
+}
+
+bool LLpopBack(LinkedList *L){
+    if(LLisEmpty(L)) return false;
+    NODE* removeNODE=L->tail->prev;
+    L->tail->prev->prev->next=L->tail;
+    L->tail->prev=L->tail->prev->prev;
+    free(removeNODE);
+    return true;
+}
+
 bool LLPrint(LinkedList *L){
     if(LLisEmpty(L)) return false;
     NODE* now=L->head;

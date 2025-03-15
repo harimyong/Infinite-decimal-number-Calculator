@@ -25,10 +25,9 @@ int main(){
             else break;
         }
     }
-    FillZero(A,B);
-    LLPrint(B->NUMBER); printf("%c\n",B->oper);
-    LLPrint(A->NUMBER); printf("%c\n",A->oper);
-    ExprNODE* res=SUB(B,A);
+
+    //LLPrint(A->NUMBER); LLPrint(B->NUMBER);
+    ExprNODE* res=MUL(A,B);
     printf("%c",res->oper); LLPrint(res->NUMBER);
     //test fin
     return 0;
