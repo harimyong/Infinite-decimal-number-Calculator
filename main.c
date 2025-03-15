@@ -28,10 +28,14 @@ int main(){
         }
     }
 
-    //LLPrint(A->NUMBER); printf("AF : %d\n",A->isFloat);
-    //LLPrint(B->NUMBER); printf("BF : %d\n",B->isFloat);
-    // ExprNODE* res=DIV(A,B);
-    // ENumberPrint(res);
+    LLPrint(A->NUMBER); printf("AF : %d\n",A->isFloat);
+    LLPrint(B->NUMBER); printf("BF : %d\n",B->isFloat);
+    PopZero(A); PopZero(B);
+    FillZero(A,B);
+    LLPrint(A->NUMBER); printf("AF : %d\n",A->isFloat);
+    LLPrint(B->NUMBER); printf("BF : %d\n",B->isFloat);
+    ExprNODE* res=MUL(A,B);
+    ENumberPrint(res); printf("res : %d\n",res->isFloat);
     //test fin
     return 0;
 }

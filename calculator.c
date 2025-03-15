@@ -9,23 +9,23 @@ ExprNODE* ADD(ExprNODE* A,ExprNODE* B){
         A->oper='+'; return SUB(B,A);
     }
 
-    // printf("%c",A->oper); LLPrint(A->NUMBER);
-    // printf("+\n");
-    // printf("%c",B->oper); LLPrint(B->NUMBER);
     PopZero(A); PopZero(B);
     FillZero(A,B);
     NODE* Anow=A->NUMBER->tail;
     NODE* Bnow=B->NUMBER->tail;
     while(Anow->prev->data!=0 && Bnow->prev->data!=0){
         Anow=Anow->prev; Bnow=Bnow->prev;
-        char tot=(Anow->data)+(Bnow->data)-96;
-        if(tot>=10 && Anow->prev->data!=0){
-            tot-=10; Anow->prev->data+=1;
+        if(Anow->data!='.'){
+            char tot=(Anow->data)+(Bnow->data)-96;
+            if(tot>=10){
+                tot-=10; 
+                if(Anow->prev->data!='.')Anow->prev->data+=1;
+                else Anow->prev->prev->data+=1;
+            }
+            //printf("%d\n",tot);
+            Anow->data=tot+48;
         }
-        //printf("%d\n",tot);
-        Anow->data=tot+48;
     }
-    //printf("fin\n");
 
     //+ + + -> ADD
     //+A + -B -> +A - +B -> SUB
@@ -53,20 +53,22 @@ ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
     }
     if(CompareAB(A,B)==false){ ExprNODE* res=SUB(B,A); res->oper='-'; return res; }
     
-    // printf("%c",A->oper); LLPrint(A->NUMBER);
-    // printf("-\n");
-    // printf("%c",B->oper); LLPrint(B->NUMBER);
     PopZero(A); PopZero(B);
+    FillZero(A,B);
     NODE* Anow=A->NUMBER->tail;
     NODE* Bnow=B->NUMBER->tail;
     while(Anow->prev->data!=0 && Bnow->prev->data!=0){
         Anow=Anow->prev; Bnow=Bnow->prev;
-        char tot=(Anow->data)-(Bnow->data);
-        if(tot<0){
-            tot+=10; Anow->prev->data-=1;
+        if(Anow->data!='.'){
+            char tot=(Anow->data)-(Bnow->data);
+            if(tot<0){
+                tot+=10; 
+                if(Anow->prev->data!='.') Anow->prev->data-=1;
+                else Anow->prev->prev->data-=1;
+            }
+            //printf("%d\n",tot);
+            Anow->data=tot+48;
         }
-        //printf("%d\n",tot);
-        Anow->data=tot+48;
     }
 
     //+A - +B -> SUB (A<B 일 경우 sub(B,A)하고 부호 마이너스)
@@ -83,7 +85,9 @@ ExprNODE* MUL(ExprNODE* A,ExprNODE* B){
     if(isZero(B)) return B;
     char res_oper='+';
     if(A->oper!=B->oper) res_oper='-';
-    
+
+    PopZero(A); PopZero(B);
+
     //나올 수 있는 최대 자리수만큼 0 추가
     LinkedList* res_N=LLInit();
     ExprNODE* res_EN=makeExprNODE(res_N,'+');
@@ -100,8 +104,10 @@ ExprNODE* MUL(ExprNODE* A,ExprNODE* B){
         NODE* Anow=A->NUMBER->tail;
         Bnow=Bnow->prev;
         UP=0;
+        if(Bnow->data=='.') continue;
         while(Anow->prev->data!=0){
             Anow=Anow->prev;
+            if(Anow->data=='.') continue;
             char tot=((Anow->data)-48)*((Bnow->data)-48)+UP;
             UP=tot/10;
             if(tot>=10) tot%=10;
@@ -109,15 +115,39 @@ ExprNODE* MUL(ExprNODE* A,ExprNODE* B){
         }
         if(UP!=0) LLpushFront(temp_L,UP+48);
 
+        //자리수 늘어날때마다 0 뒤에 하나 더 추가
         NODE* tempNODE=B->NUMBER->tail->prev;
         while(tempNODE!=Bnow){
             tempNODE=tempNODE->prev;
             LLpushBack(temp_L,'0');
         }
 
+        //결과 노드에 더하기
         ExprNODE* temp_EN=makeExprNODE(temp_L,'+');
         res_EN=ADD(res_EN,temp_EN);
     }
+
+    //소수점 옮기기
+    NODE* point=res_EN->NUMBER->tail;
+    if(A->isFloat){
+        now=A->NUMBER->tail;
+        while(now->prev->data!='.'){ now=now->prev; point=point->prev; }
+    }
+    if(B->isFloat){
+        now=B->NUMBER->tail;
+        while(now->prev->data!='.'){ now=now->prev; point=point->prev; }
+    }
+    if(point->data!=0){
+        NODE* newNODE=makeNode('.');
+        newNODE->next=point;
+        newNODE->prev=point->prev;
+        point->prev->next=newNODE;
+        point->prev=newNODE;
+        res_EN->isFloat=true;
+    }
+
+
+    //반환
     PopZero(res_EN);
     res_EN->oper=res_oper;
     //LLPrint(res_EN->NUMBER);
@@ -233,8 +263,17 @@ bool isSameAB(ExprNODE* A,ExprNODE* B){
 }
 
 void FillZero(ExprNODE* A,ExprNODE* B){
+    //Fill Front
     NODE* Anow=A->NUMBER->tail;
+    if(A->isFloat){
+        while(Anow->prev->data!='.') Anow=Anow->prev;
+        Anow=Anow->prev;
+    }
     NODE* Bnow=B->NUMBER->tail;
+    if(B->isFloat){
+        while(Bnow->prev->data!='.') Bnow=Bnow->prev;
+        Bnow=Bnow->prev;
+    }
     while(Anow->prev!=NULL || Bnow->prev!=NULL){
         if(Anow->prev!=NULL) Anow=Anow->prev;
         else LLpushFront(A->NUMBER,'0');
@@ -243,10 +282,105 @@ void FillZero(ExprNODE* A,ExprNODE* B){
     }
     LLpushFront(A->NUMBER,'0');
     LLpushFront(B->NUMBER,'0');
+
+    if(!A->isFloat and !B->isFloat) return;
+
+    //Fill Back
+    if(A->isFloat){
+        Anow=A->NUMBER->tail;
+        while(Anow->prev->data!='.') Anow=Anow->prev;
+        Anow=Anow->prev;
+    }else{
+        LLpushBack(A->NUMBER,'.');
+        A->isFloat=true;
+        Anow=A->NUMBER->tail->prev;
+    }
+    if(B->isFloat){
+        Bnow=B->NUMBER->tail;
+        while(Bnow->prev->data!='.') Bnow=Bnow->prev;
+        Bnow=Bnow->prev;
+    }else{
+        LLpushBack(B->NUMBER,'.');
+        B->isFloat=true;
+        Bnow=B->NUMBER->tail->prev;
+    }
+    while(Anow->next!=NULL || Bnow->next!=NULL){
+        if(Anow->next!=NULL) Anow=Anow->next;
+        else LLpushBack(A->NUMBER,'0');
+        if(Bnow->next!=NULL) Bnow=Bnow->next;
+        else LLpushBack(B->NUMBER,'0');
+    }
 }
 
 void PopZero(ExprNODE *N){
     NODE* now=N->NUMBER->head;
     while(now->next->data=='0') LLpopFront(N->NUMBER);
+    if(N->isFloat){
+        if(N->NUMBER->head->next->data=='.') LLpushFront(N->NUMBER,'0');
+        now=N->NUMBER->tail;
+        while(now->prev->data=='0') LLpopBack(N->NUMBER);
+        if(N->NUMBER->tail->prev->data=='.'){
+            LLpopBack(N->NUMBER);
+            N->isFloat=false;
+        }
+    }
     if(LLisEmpty(N->NUMBER)) LLpushFront(N->NUMBER,'0');
+}
+
+void MULbyTen(ExprNODE *N){
+    if(N->isFloat==false) LLpushBack(N->NUMBER,'0'); 
+    else{
+        if(N->NUMBER->tail->prev->prev->data=='.'){
+            NODE* removeNODE=N->NUMBER->tail->prev->prev;
+            N->isFloat=true;
+            N->NUMBER->tail->prev->prev->prev->next=N->NUMBER->tail->prev;
+            N->NUMBER->tail->prev->prev=N->NUMBER->tail->prev->prev->prev;
+            free(removeNODE);
+            N->isFloat=false;
+            PopZero(N);
+        }else{
+            NODE* Anow=N->NUMBER->head;
+            while(Anow->next->data!='.') Anow=Anow->next;
+            Anow=Anow->next;
+            NODE* Bnow=Anow->next;
+            char temp=Anow->data;
+            Anow->data=Bnow->data;
+            Bnow->data=temp;
+            PopZero(N);
+            if(N->NUMBER->head->next->data=='.') LLpushFront(N->NUMBER,'0');
+        }   
+    }
+}
+
+void DIVbyTen(ExprNODE *N){
+    if(N->isFloat==false){
+        if(N->NUMBER->tail->prev->data=='0') LLpopBack(N->NUMBER);
+        else{
+            LLpushBack(N->NUMBER,'.');
+            NODE* point=N->NUMBER->tail->prev;
+            NODE* num=point->prev;
+            char temp=point->data;
+            point->data=num->data;
+            num->data=temp;
+            N->isFloat=true;
+        }
+    }
+    else{
+        if(N->NUMBER->head->next->next->data=='.'){
+            NODE* removeNODE=N->NUMBER->head->next->next;
+            removeNODE->prev->next=removeNODE->next;
+            removeNODE->next->prev=removeNODE->prev;
+            free(removeNODE);
+            LLpushFront(N->NUMBER,'.');
+            LLpushFront(N->NUMBER,'0');
+        }else{
+            NODE* point=N->NUMBER->head;
+            while(point->next->data!='.') point=point->next;
+            point=point->next;
+            NODE* num=point->prev;
+            char temp=point->data;
+            point->data=num->data;
+            num->data=temp;
+        }
+    }
 }
