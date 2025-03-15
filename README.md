@@ -6,4 +6,4 @@ gcc main.c node.c linkedList.c expression.c number.c calculator.c
 
 ./a.out < input.txt
 
-곱하기 구현해야함.
+나누기 구현해야함.
