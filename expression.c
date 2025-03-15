@@ -4,17 +4,23 @@ bool isNUM_ASCII(char data){ return '0'<=data && data<='9'; }
 
 Expr* NumPreprocessing(LinkedList *expr){
     Expr* EXPR=EInit();
-    if(LLisEmpty(expr)) return EXPR;
+    if(LLisEmpty(expr)) return NULL;
     NODE* now=expr->head->next;
     while(now->next!=NULL){
         if(isNUM_ASCII(now->data)){
             LinkedList* NUMBER=LLInit();
-            while(isNUM_ASCII(now->data)){
+            bool flag=False;
+            while(isNUM_ASCII(now->data) || now->data=='.'){
+                if(now->data=='.'){
+                    if(!flag) flag=True;
+                    else return NULL;
+                } 
                 LLpushBack(NUMBER,now->data);
                 now=now->next;
             }
             //LLPrint(NUMBER);
             ExprNODE* newElement=makeExprNODE(NUMBER,'+');
+            if(flag) newElement->isFloat=true;
             EpushBack(EXPR,newElement);
         }else{
             //printf("기호 %c\n",now->data);
@@ -42,6 +48,7 @@ ExprNODE* makeExprNODE(LinkedList* NUMBER,char oper){
     newNode->NUMBER=NUMBER;
     newNode->prev=newNode;
     newNode->next=newNode;
+    newNode->isFloat=False;
     return newNode;
 }
 
@@ -95,4 +102,20 @@ bool EAllRemove(Expr *E){
     if(EElementRemove(E)==false) return false;
     EHeadTailRemove(E); free(E);
     return true;
+}
+
+bool isNUMBER(ExprNODE* EN){ return EN->NUMBER!=NULL; }
+bool isOper(ExprNODE* EN){ return EN->NUMBER==NULL && EN->oper!=0; }
+bool isZero(ExprNODE* N){
+    NODE* now=N->NUMBER->head;
+    while(now->next->data!=0){
+        now=now->next;
+        if(now->data!='0') return false;
+    }
+    return true;
+}
+
+void ENumberPrint(ExprNODE *EN){
+    if(isNUMBER(EN)==false) printf("숫자가 아닙니다!\n");
+    else { printf("%c",EN->oper); LLPrint(EN->NUMBER); }
 }

@@ -4,6 +4,7 @@ typedef struct ExprNODE{
     char oper;
     struct ExprNODE* next;
     struct ExprNODE* prev;
+    bool isFloat;
 }ExprNODE;
 
 typedef struct 
@@ -23,3 +24,7 @@ bool EPrint(Expr *E);
 bool EElementRemove(Expr *E);
 void EHeadTailRemove(Expr *E);
 bool EAllRemove(Expr *E);
+bool isZero(ExprNODE* N);
+bool isNUMBER(ExprNODE* EN);
+bool isOper(ExprNODE* EN);
+void ENumberPrint(ExprNODE *EN);

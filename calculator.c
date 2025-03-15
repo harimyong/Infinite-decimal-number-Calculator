@@ -180,12 +180,17 @@ ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
     }
 
     
-
-
-
-
     ExprNODE* Q_EN=makeExprNODE(Q_N,Q_oper);
     PopZero(Q_EN);
+    if(isZero(R_EN)) return Q_EN; //나머지가 0일 경우 더 이어서 연산 X
+
+    //Decimal 나머지 구현 미완
+    Q_EN->isFloat=true;
+    
+
+
+
+
     return Q_EN;
 }
 
@@ -227,15 +232,6 @@ bool isSameAB(ExprNODE* A,ExprNODE* B){
     return true;
 }
 
-bool isZero(ExprNODE* N){
-    NODE* now=N->NUMBER->head;
-    while(now->next->data!=0){
-        now=now->next;
-        if(now->data!='0') return false;
-    }
-    return true;
-}
-
 void FillZero(ExprNODE* A,ExprNODE* B){
     NODE* Anow=A->NUMBER->tail;
     NODE* Bnow=B->NUMBER->tail;
@@ -254,11 +250,3 @@ void PopZero(ExprNODE *N){
     while(now->next->data=='0') LLpopFront(N->NUMBER);
     if(LLisEmpty(N->NUMBER)) LLpushFront(N->NUMBER,'0');
 }
-
-void ENumberPrint(ExprNODE *EN){
-    if(isNUMBER(EN)==false) printf("숫자가 아닙니다!\n");
-    else { printf("%c",EN->oper); LLPrint(EN->NUMBER); }
-}
-
-bool isNUMBER(ExprNODE* EN){ return EN->NUMBER!=NULL; }
-bool isOper(ExprNODE* EN){ return EN->NUMBER==NULL && EN->oper!=0; }
