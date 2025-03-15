@@ -51,7 +51,7 @@ ExprNODE* SUB(ExprNODE* A,ExprNODE* B){
         A->oper='+'; B->oper='+';
         return SUB(B,A);
     }
-    if(CompareAB(A,B,true)==false){ ExprNODE* res=SUB(B,A); res->oper='-'; return res; }
+    if(CompareAB(A,B)==false){ ExprNODE* res=SUB(B,A); res->oper='-'; return res; }
     
     // printf("%c",A->oper); LLPrint(A->NUMBER);
     // printf("-\n");
@@ -135,29 +135,58 @@ ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
     //BNumber Copy -> RemainderNumber
     LinkedList* R_N=LLInit();
     ExprNODE* R_EN=makeExprNODE(R_N,'+');
-    // NODE* Anow=A->NUMBER->head;
-    // while(Anow->next->data!=0){ Anow=Anow->next; LLpushBack(R_N,Anow->data); }
+
 
     //Divide
+    //Quotient 몫 구현 완료
     NODE* Anow=A->NUMBER->head;
     while(Anow->next->data!=0){
         Anow=Anow->next;
         LLpushBack(R_N,Anow->data);
-        if(isSameAB(B,R_EN)==false and CompareAB(B,R_EN,false)==true){
+        if(isSameAB(B,R_EN)==false and CompareAB(B,R_EN)==true){
             LLpushBack(Q_N,'0');
+        }else{
+            ExprNODE* temp_EN=makeExprNODE(LLInit(),'+');
+            bool flag=false;
+            for(int i=0;i<10;i++){
+                LLElementRemove(temp_EN->NUMBER);
+                LLpushBack(temp_EN->NUMBER,i+48);
+                temp_EN=MUL(temp_EN,B);
+                if(isSameAB(temp_EN,R_EN)){
+                    R_EN=SUB(R_EN,temp_EN);
+                    LLpushBack(Q_N,i+48);
+                    flag=true;
+                    break;
+                }else if(CompareAB(temp_EN,R_EN)){
+                    LLElementRemove(temp_EN->NUMBER);
+                    LLpushBack(temp_EN->NUMBER,i+47);
+                    temp_EN=MUL(temp_EN,B);
+                    R_EN=SUB(R_EN,temp_EN);
+                    LLpushBack(Q_N,i+47);
+                    flag=true;
+                    break;
+                }
+            }
+            if(flag==false){
+                LLElementRemove(temp_EN->NUMBER);
+                LLpushBack(temp_EN->NUMBER,'9');
+                temp_EN=MUL(temp_EN,B);
+                R_EN=SUB(R_EN,temp_EN);
+                LLpushBack(Q_N,57);
+            }
+            LLAllRemove(temp_EN->NUMBER);
+            free(temp_EN);
         }
-        printf("\n");
-        printf("Q : ");LLPrint(Q_N);
-        printf("R : ");LLPrint(R_N);
-
     }
-    printf("\n");
-    LLPrint(Q_N);
-    LLPrint(R_N);
+
+    
 
 
 
-    return makeExprNODE(Q_N,Q_oper);
+
+    ExprNODE* Q_EN=makeExprNODE(Q_N,Q_oper);
+    PopZero(Q_EN);
+    return Q_EN;
 }
 
 
@@ -167,29 +196,34 @@ ExprNODE* DIV(ExprNODE* A,ExprNODE* B){
 
 
 //Utilitys
-bool CompareAB(ExprNODE* A,ExprNODE* B,bool opt){ 
-    if(opt) { PopZero(A); PopZero(B); }
-    FillZero(A,B);
+bool CompareAB(ExprNODE* A,ExprNODE* B){ 
     if(isSameAB(A,B)==true) return true;
+    FillZero(A,B);
     NODE* Anow=A->NUMBER->head;
     NODE* Bnow=B->NUMBER->head;
+    // printf("함수 안\n");
+    // LLPrint(A->NUMBER); LLPrint(B->NUMBER);
+    // printf("\n");
     while(Anow->next->data!=0 && Bnow->next->data!=0){
         Anow=Anow->next; Bnow=Bnow->next;
         //printf("%c %c\n",Anow->data,Bnow->data);
         if(Anow->data==Bnow->data) continue;
-        else if(Anow->data>Bnow->data) { if(opt) { PopZero(A); PopZero(B); } return true; }
-        else { if(opt) { PopZero(A); PopZero(B); } return false; }
+        else if(Anow->data>Bnow->data) { PopZero(A); PopZero(B); return true; }
+        else { PopZero(A); PopZero(B); return false; }
     }
 }
 
 bool isSameAB(ExprNODE* A,ExprNODE* B){ 
+    //if(LLisEmpty(A->NUMBER) || LLisEmpty(B->NUMBER)) return false;
+    FillZero(A,B);
     NODE* Anow=A->NUMBER->head;
     NODE* Bnow=B->NUMBER->head;
     while(Anow->next->data!=0 && Bnow->next->data!=0){
         Anow=Anow->next; Bnow=Bnow->next;
         //printf("%c %c\n",Anow->data,Bnow->data);
-        if(Anow->data!=Bnow->data) return false;
+        if(Anow->data!=Bnow->data) { PopZero(A); PopZero(B); return false; }
     }
+    PopZero(A); PopZero(B);
     return true;
 }
 

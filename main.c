@@ -10,8 +10,8 @@ int main(){
         return 0;
     }
 
-    EPrint(Aft_input);
-
+    //EPrint(Aft_input);
+    //printf("\n");
 
     //test
     ExprNODE* A=NULL;
@@ -28,7 +28,7 @@ int main(){
 
     //LLPrint(A->NUMBER); LLPrint(B->NUMBER);
     ExprNODE* res=DIV(A,B);
-    //ENumberPrint(res);
+    ENumberPrint(res);
     //test fin
     return 0;
 }
